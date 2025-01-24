@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {CalculatorService} from './calculator.service';
 
 @Component({
   selector: 'app-root',
@@ -15,13 +16,15 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
   title = 'Mutual Fund Calculator';
-  mutualFunds: string[] = ['Fund A', 'Fund B', 'Fund C']; // Mock mutual funds
+  mutualFunds: string[] = []; // Mock mutual funds
   selectedTicker: string = '';
   initialInvestment: number | null = null; // Initial investment
   timeHorizon: number | null = null; // Investment duration (years)
   futureValue: number | null = null; // Predicted future value
 
-  constructor() {}
+  constructor(private calculatorService: CalculatorService) {
+    this.mutualFunds = this.calculatorService.getMutualFunds();
+  }
 
   calculateFutureValue(): void {
     if (!this.selectedTicker || !this.initialInvestment || !this.timeHorizon) {
