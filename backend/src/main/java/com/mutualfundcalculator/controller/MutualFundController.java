@@ -19,11 +19,9 @@ public class MutualFundController {
         return mutualFundService.getAllMutualFunds();
     }
 
-    @GetMapping("/{ticker}")
-public MutualFund getMutualFundByTicker(
-        @PathVariable String ticker,
-        @RequestParam double principal,
-        @RequestParam int time) {
-    return mutualFundService.getMutualFundByTicker(ticker, principal, time);
-}
+    // ✅ Fix: Only pass `ticker`, not `principal` and `time`
+    @GetMapping("/ticker/{ticker}")
+    public MutualFund getMutualFundByTicker(@PathVariable String ticker) {
+        return mutualFundService.getMutualFundByTicker(ticker);
+    }
 }
