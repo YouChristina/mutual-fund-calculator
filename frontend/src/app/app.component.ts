@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {CalculatorService} from './calculator.service';
-//import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +12,7 @@ import {CalculatorService} from './calculator.service';
   imports: [
     CommonModule,
     FormsModule,
-  ],
+  ]
 })
 export class AppComponent {
   title = 'Mutual Fund Calculator';
@@ -24,21 +23,25 @@ export class AppComponent {
   futureValue: number | null = null; // Predicted future value
 
   //private calculatorService: CalculatorService
-  constructor(private calculatorService: CalculatorService) {
-    this.mutualFunds = this.calculatorService.getMutualFunds();
-    //this.mutualFunds = this.calculatorService.getItems().subscribe((data) => {
-      //this.items = data;
-    //});
+  constructor(private calculatorService: CalculatorService) {}
 
+  ngOnInit() {
+    this.loadMutualFunds();
   }
 
+   *
+  loadMutualFunds() {
+    this.calculatorService.getMutualFunds().subscribe(data => {
+      this.mutualFunds = data;
+    });
+  }
   calculateFutureValue(): void {
     if (!this.selectedTicker || !this.initialInvestment || !this.timeHorizon) {
       alert('Please fill in all fields.');
       return;
     }
 
-    alert(this.calculatorService.getMutualFunds());
+    //alert(this.calculatorService.getMutualFunds());
 
     const rateOfReturn = 0.1; // Mock rate of return (10%)
     this.futureValue = this.initialInvestment * Math.pow(1 + rateOfReturn, this.timeHorizon);
