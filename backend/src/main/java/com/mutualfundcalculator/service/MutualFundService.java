@@ -45,11 +45,12 @@ public class MutualFundService {
     public List<MutualFund> getAllMutualFunds() {
         for (MutualFund fund : mutualFunds) {
             double beta = getBetaFromNewtonApi(fund.getTicker());
-            fund.setBeta(beta);
+            fund.setBeta(beta); // Update the fund's beta
         }
         return mutualFunds;
     }
-
+    
+    
     public MutualFund getMutualFundByTicker(String ticker, double principal, int time) {
         for (MutualFund fund : mutualFunds) {
             if (fund.getTicker().equals(ticker)) {
@@ -68,12 +69,27 @@ public class MutualFundService {
     }
 
     private double getBetaFromNewtonApi(String ticker) {
-        String url = "https://api.newtonanalytics.com/stock-beta/?ticker=" + ticker + "&index=^GSPC&interval=1mo&observations=12";
-        RestTemplate restTemplate = new RestTemplate();
-        BetaResponse response = restTemplate.getForObject(url, BetaResponse.class);
-        return response != null ? response.getBeta() : 1.0; // Default to 1.0 if API call fails
+        try {
+            String url = "https://api.newtonanalytics.com/stock-beta/?ticker=" + ticker + "&index=^GSPC&interval=1mo&observations=12";
+            System.out.println("Fetching beta from: " + url);
+    
+            RestTemplate restTemplate = new RestTemplate();
+            BetaResponse response = restTemplate.getForObject(url, BetaResponse.class);
+    
+            if (response != null) {
+                System.out.println("API Response: " + response); // Debugging
+                return response.getBeta();
+            } else {
+                System.err.println("Beta API returned null for " + ticker);
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching beta for " + ticker + ": " + e.getMessage());
+        }
+    
+        return 1.0; // Default if API fails
     }
-
+    
+    
     private double calculateFutureValue(double principal, double rate, int time) {
         return principal * Math.exp(rate * time);
     }
