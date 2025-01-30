@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BetaResponse {
 
     @JsonProperty("status")
-    private String status; // Change to String
+    private String status; 
 
     @JsonProperty("statusMessage")
     private String statusMessage;
 
     @JsonProperty("data")
-    private double beta; // Change to double (not Double)
+    private double beta; 
 
     public double getBeta() {
         return beta;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")  // Allow Angular frontend
+@CrossOrigin(origins = "http://localhost:4200")  
 
 @RestController
 @RequestMapping("/api/mutualfunds")
@@ -24,7 +24,6 @@ public class MutualFundController {
         return mutualFundService.getAllMutualFunds();
     }
 
-    // ✅ Fix: Only pass `ticker`, not `principal` and `time`
     @GetMapping("/ticker/{ticker}")
     public MutualFund getMutualFundByTicker(@PathVariable String ticker) {
         return mutualFundService.getMutualFundByTicker(ticker);
