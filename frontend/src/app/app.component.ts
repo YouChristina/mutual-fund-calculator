@@ -15,10 +15,10 @@ import { CalculatorService } from './calculator.service';
 })
 export class AppComponent {
   title = 'Mutual Fund Calculator';
-  mutualFunds: { ticker: string; name: string }[] = [];
+  mutualFunds: { ticker: string; name: string; beta: number }[] = [];
   selectedTicker: string = '';
-  initialInvestment: number | null = null;
-  timeHorizon: number | null = null;
+  initialInvestment: number = 0;
+  timeHorizon: number = 0;
   futureValue: number | null = null;
 
   constructor(private calculatorService: CalculatorService) {}
@@ -29,38 +29,63 @@ export class AppComponent {
   }
 
   loadMutualFunds() {
-    console.log('Loading mutual funds...');
-    this.calculatorService.getMutualFunds().subscribe(
-      data => {
-        console.log('Fetched mutual funds:', data);
-        if (data.length === 0) {
-          console.warn('No mutual funds found!');
-        }
-        this.mutualFunds = data;
-      },
-      error => {
-        console.error('Error fetching mutual funds:', error);
-      }
-    );
+    this.calculatorService.getMutualFunds().subscribe(data => {
+      console.log("Fetched mutual funds:", data);
+      this.mutualFunds = data;
+    }, error => {
+      console.error("Error fetching mutual funds:", error);
+    });
   }
 
-
-  calculateFutureValue(): void { // ✅ Added missing function
+  calculateFutureValue(): void {
     if (!this.selectedTicker || !this.initialInvestment || !this.timeHorizon) {
       alert('Please fill in all fields.');
       return;
     }
 
-    const rateOfReturn = 0.1;
-    this.futureValue = this.initialInvestment * Math.pow(1 + rateOfReturn, this.timeHorizon);
-    console.log(`Calculated Future Value: ${this.futureValue}`);
+    const selectedFund = this.mutualFunds.find(fund => fund.ticker === this.selectedTicker);
+
+    if (!selectedFund) {
+      alert('Invalid mutual fund selected.');
+      return;
+    }
+
+    const beta = selectedFund.beta; // Get beta from the mutual fund data
+
+    this.calculatorService.getInvestmentRate().subscribe(({ riskFreeRate, marketReturnRate }) => {
+      // Convert rates from percentage to decimal
+      const riskFreeDecimal = riskFreeRate / 100;
+      const marketReturnDecimal = marketReturnRate / 100;
+
+      // Calculate CAPM return rate
+      let rateOfReturn = riskFreeDecimal + beta * (marketReturnDecimal - riskFreeDecimal);
+
+      console.log(`Risk-Free Rate: ${riskFreeDecimal}`);
+      console.log(`Market Return Rate: ${marketReturnDecimal}`);
+      console.log(`Beta: ${beta}`);
+      console.log(`Calculated Rate of Return (r): ${rateOfReturn}`);
+
+      // Ensure r is within a reasonable range
+      if (rateOfReturn > 0.5) {
+        console.warn("⚠️ Capping high rate of return:", rateOfReturn);
+        rateOfReturn = 0.5; // Cap at 50% to avoid unrealistic values
+      }
+
+      // Calculate Future Value (FV = P * e^(rt))
+      this.futureValue = this.initialInvestment * Math.exp(rateOfReturn * this.timeHorizon);
+
+      console.log(`💰 Calculated Future Value: ${this.futureValue}`);
+    });
   }
 
+  // Fix: Add missing modal functions
   openModal() {
-    document.getElementById('instructionModal')!.style.display = 'flex';
+    const modal = document.getElementById('instructionModal');
+    if (modal) modal.style.display = 'flex';
   }
 
   closeModal() {
-    document.getElementById('instructionModal')!.style.display = 'none';
+    const modal = document.getElementById('instructionModal');
+    if (modal) modal.style.display = 'none';
   }
 }

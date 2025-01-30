@@ -1,0 +1,10 @@
+{
+  "/api/stlouis": {
+    "target": "https://api.stlouisfed.org",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/stlouis": ""
+    }
+  }
+}
