@@ -55,4 +55,12 @@ export class AppComponent {
     this.futureValue = this.initialInvestment * Math.pow(1 + rateOfReturn, this.timeHorizon);
     console.log(`Calculated Future Value: ${this.futureValue}`);
   }
+
+  openModal() {
+    document.getElementById('instructionModal')!.style.display = 'flex';
+  }
+
+  closeModal() {
+    document.getElementById('instructionModal')!.style.display = 'none';
+  }
 }
