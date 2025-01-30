@@ -9,6 +9,7 @@
   font-family: "Montserrat", sans-serif;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -51,6 +52,10 @@ input, select {
   border-radius: 6px;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   transition: 0.2s ease-in-out;
+
+
+  margin-bottom: 1rem;
+  box-sizing: border-box;
 }
 
 input:focus, select:focus {
