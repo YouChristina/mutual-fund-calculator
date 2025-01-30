@@ -43,4 +43,12 @@ export class AppComponent {
     const rateOfReturn = 0.1; // Mock rate of return (10%)
     this.futureValue = this.initialInvestment * Math.pow(1 + rateOfReturn, this.timeHorizon);
   }
+
+  openModal() {
+    document.getElementById('instructionModal')!.style.display = 'flex';
+  }
+
+  closeModal() {
+    document.getElementById('instructionModal')!.style.display = 'none';
+  }
 }

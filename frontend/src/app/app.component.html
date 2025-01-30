@@ -110,3 +110,18 @@
     </tbody>
   </table>
 </div>
+
+<!-- Floating Help Button -->
+<button class="help-button" (click)="openModal()">?</button>
+
+<!-- Instruction Modal -->
+<div class="modal" id="instructionModal">
+  <div class="modal-content">
+    <h2>How to Use</h2>
+    <p>1. Select a mutual fund from the dropdown.</p>
+    <p>2. Enter your initial investment amount.</p>
+    <p>3. Enter the number of years you plan to invest.</p>
+    <p>4. Click "Calculate" to see the projected value.</p>
+    <button (click)="closeModal()">Got it!</button>
+  </div>
+</div>
