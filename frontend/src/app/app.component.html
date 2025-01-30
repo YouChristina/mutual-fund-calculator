@@ -74,10 +74,12 @@
 
   <!-- Dropdown for selecting a mutual fund -->
   <label for="ticker">Select Mutual Fund:</label>
-  <select id="ticker" [(ngModel)]="selectedTicker">
+<select id="ticker" [(ngModel)]="selectedTicker">
     <option value="" disabled selected>Select a fund</option>
-    <option *ngFor="let fund of mutualFunds" [value]="fund">{{ fund }}</option>
-  </select>
+    <option *ngFor="let fund of mutualFunds" [value]="fund.ticker">{{ fund.name }}</option>
+</select>
+
+
 
   <!-- Input for initial investment -->
   <label for="initialInvestment">Initial Investment Amount ($):</label>
